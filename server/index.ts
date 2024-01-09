@@ -35,7 +35,6 @@ if (isProd) {
 
   app.use('/data', express.static(join(__dirname, '../data')));
 
-
   app.use("/", createProxyMiddleware({
     target: 'http://localhost:5173/',
     changeOrigin: true,

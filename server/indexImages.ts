@@ -13,7 +13,6 @@ dotenv.config();
 const indexName = getEnv("PINECONE_INDEX");
 const pinecone = new Pinecone();
 
-
 function* chunkArray<T>(array: T[], chunkSize: number): Generator<T[]> {
   for (let i = 0; i < array.length; i += chunkSize) {
     yield array.slice(i, i + chunkSize);
@@ -40,8 +39,9 @@ const indexImages = async () => {
   try {
     // Create the index if it doesn't already exist
     const indexList = await pinecone.listIndexes();
-    if (indexList.indexOf({ name: indexName }) === -1) {
-      await pinecone.createIndex({ name: indexName, dimension: 512, waitUntilReady: true })
+    const index = indexList.findIndex((item) => item.name === indexName);
+    if (index === -1) {
+      await pinecone.createIndex({ name: indexName, dimension: 512, waitUntilReady: true });
     }
 
     await embedder.init("Xenova/clip-vit-base-patch32");
